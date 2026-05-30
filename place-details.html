@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SaudiWay - Place Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .topbar{
+      position:fixed;top:0;left:260px;right:0;height:68px;
+      background:#f6f2e9;border-bottom:1px solid #eee8db;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 32px;z-index:999;
+    }
+    .search-wrap{
+      display:flex;align-items:center;background:#fff;
+      border:1px solid #eee8db;border-radius:14px;
+      padding:0 16px;height:42px;gap:10px;width:340px;
+    }
+    .search-wrap input{border:none;outline:none;background:transparent;font-size:14px;color:#1c1c1c;width:100%;font-family:'Inter',sans-serif}
+    .search-wrap input::placeholder{color:#aaa}
+    .search-wrap svg{width:16px;height:16px;opacity:.5;flex-shrink:0}
+    .topbar-right{display:flex;align-items:center;gap:16px}
+    .icon-btn{width:38px;height:38px;border-radius:12px;background:#fff;border:1px solid #eee8db;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .icon-btn svg{width:17px;height:17px;opacity:.7}
+    .avatar-chip{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2a6a3f,#3a8f56);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+    .main{margin-top:68px}
+
+    /* Back btn */
+    .back-btn{
+      display:inline-flex;align-items:center;gap:8px;
+      color:#2a6a3f;font-size:14px;font-weight:600;
+      text-decoration:none;margin-bottom:20px;cursor:pointer;
+    }
+    .back-btn svg{width:16px;height:16px}
+
+    /* Hero image */
+    .hero-img{
+      width:100%;height:420px;border-radius:24px;
+      overflow:hidden;position:relative;background:#e0dbd0;
+      margin-bottom:28px;
+    }
+    .hero-img img{width:100%;height:100%;object-fit:cover;display:block}
+    .hero-img .overlay-grad{
+      position:absolute;inset:0;
+      background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.6));
+    }
+    .hero-img .img-meta{
+      position:absolute;bottom:24px;left:28px;color:#fff;
+    }
+    .img-meta .cat-pill{
+      display:inline-block;background:rgba(31,95,44,0.85);
+      font-size:10px;letter-spacing:1.5px;padding:4px 12px;border-radius:999px;margin-bottom:10px;
+    }
+    .img-meta h1{font-size:30px;font-weight:700;margin:0 0 6px;letter-spacing:-0.5px}
+    .img-meta .loc-row{display:flex;align-items:center;gap:6px;font-size:13px;opacity:.85}
+    .img-meta .loc-row svg{width:14px;height:14px}
+    .hero-actions{
+      position:absolute;top:20px;right:20px;
+      display:flex;gap:10px;
+    }
+    .ha-btn{
+      width:40px;height:40px;background:rgba(255,255,255,0.92);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      border:none;cursor:pointer;
+    }
+    .ha-btn svg{width:18px;height:18px}
+
+    /* Content layout */
+    .detail-layout{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+
+    /* Info section */
+    .info-section{background:#fff;border-radius:20px;padding:24px;margin-bottom:18px}
+    .info-section h2{font-size:17px;font-weight:700;margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid #f0ebe0}
+
+    .rating-row{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .big-rating{font-size:42px;font-weight:800;color:#1f4d2e}
+    .stars-col .stars{font-size:18px;color:#e8a020}
+    .stars-col .rev{font-size:12px;color:#888;margin-top:2px}
+
+    .rating-bars .rbar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .rbar-row span{font-size:12px;color:#888;width:8px}
+    .rbar{flex:1;height:6px;background:#f0ebe0;border-radius:999px;overflow:hidden}
+    .rbar-fill{height:100%;background:#2a6a3f;border-radius:999px}
+
+    .desc-text{font-size:14px;color:#555;line-height:1.7}
+
+    /* Tags */
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .tag-item{padding:6px 14px;background:#f0f7f2;color:#2a6a3f;border-radius:999px;font-size:12px;font-weight:600}
+
+    /* Info grid */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .info-item{background:#f9f5ed;border-radius:14px;padding:14px}
+    .info-item .ii-label{font-size:10px;letter-spacing:1.2px;color:#999;margin-bottom:4px}
+    .info-item .ii-val{font-size:14px;font-weight:700;color:#1c1c1c}
+
+    /* Gallery */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+    .gallery-img{height:100px;border-radius:12px;overflow:hidden;background:#e0dbd0;cursor:pointer}
+    .gallery-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s}
+    .gallery-img:hover img{transform:scale(1.08)}
+
+    /* Right sidebar */
+    .action-card{background:#fff;border-radius:20px;padding:24px;margin-bottom:18px}
+    .action-card h3{font-size:15px;font-weight:700;margin:0 0 16px}
+    .price-display{font-size:28px;font-weight:800;color:#1f4d2e;margin-bottom:4px}
+    .price-display span{font-size:14px;font-weight:400;color:#888}
+    .price-note{font-size:12px;color:#888;margin-bottom:20px}
+    .btn-primary-full{
+      width:100%;padding:14px;border:none;border-radius:14px;
+      background:linear-gradient(135deg,#1f4d2e,#2a6a3f);
+      color:#fff;font-size:15px;font-weight:700;cursor:pointer;
+      transition:all 0.2s;margin-bottom:10px;
+    }
+    .btn-primary-full:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(31,77,46,0.3)}
+    .btn-outline-full{
+      width:100%;padding:13px;border:1.5px solid #eee8db;border-radius:14px;
+      background:#fff;font-size:14px;font-weight:600;cursor:pointer;
+      transition:all 0.2s;color:#1c1c1c;
+    }
+    .btn-outline-full:hover{border-color:#2a6a3f;color:#2a6a3f}
+
+    .map-placeholder{
+      width:100%;height:160px;background:#e0dbd0;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;color:#888;margin-top:16px;
+      position:relative;overflow:hidden;
+    }
+    .map-placeholder::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,#d4cfc5,#e8e2d8);
+    }
+    .map-placeholder span{position:relative;z-index:1}
+
+    .nearby-list{margin-top:14px}
+    .nearby-item{
+      display:flex;align-items:center;gap:12px;
+      padding:10px 0;border-bottom:1px solid #f0ebe0;
+      text-decoration:none;color:inherit;
+    }
+    .nearby-item:last-child{border-bottom:none}
+    .nearby-img{width:48px;height:48px;border-radius:10px;overflow:hidden;background:#e0dbd0;flex-shrink:0}
+    .nearby-img img{width:100%;height:100%;object-fit:cover}
+    .nearby-info strong{display:block;font-size:13px;font-weight:600}
+    .nearby-info span{font-size:11px;color:#888}
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+  <img src="SaudiWay logo.png" class="brand-logo" alt="SaudiWay Logo"/>
+  
+  <div class="tag">Discover the Heart of Riyadh</div>
+</div>
+      <nav class="nav">
+        <a href="home.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </a>
+        <a href="search.html" class="menu-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
+        </a>
+        <a href="budget.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Budget Estimator
+        </a>
+        <a href="planner.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Plan My Trips
+        </a>
+        <a href="profile.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile
+        </a>
+        <a href="dashboard.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="setting.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Fixed Top Search Bar -->
+  <div class="topbar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search places in Riyadh..."/>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+      <div class="avatar-chip">SK</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="main" style="padding:28px 32px">
+
+    <a class="back-btn" href="search.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Search
+    </a>
+
+    <!-- Hero Image -->
+    <div class="hero-img">
+      <img id="heroImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Al-Diriyah.jpg/1280px-Al-Diriyah.jpg" alt="Place" onerror="this.style.display='none'"/>
+      <div class="overlay-grad"></div>
+      <div class="img-meta">
+        <span class="cat-pill" id="catPill">HERITAGE</span>
+        <h1 id="placeName">Al-Diriyah</h1>
+        <div class="loc-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="placeLoc">Northwest Riyadh</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="ha-btn" id="favBtn" onclick="toggleFav()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="ha-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="detail-layout">
+      <!-- Left -->
+      <div>
+        <!-- Description -->
+        <div class="info-section">
+          <h2>About This Place</h2>
+          <p class="desc-text" id="placeDesc">Al-Diriyah is a town on the northwestern outskirts of Riyadh, Saudi Arabia, and the original home of the Saudi royal family. It was the capital of the first Saudi state and is now one of the most important heritage sites in the kingdom. The At-Turaif district, a UNESCO World Heritage Site since 2010, features remarkable Najdi architectural style buildings dating back to the 18th century.</p>
+          <div class="tags">
+            <span class="tag-item">UNESCO Heritage</span>
+            <span class="tag-item">Family Friendly</span>
+            <span class="tag-item">Photography</span>
+            <span class="tag-item">History</span>
+            <span class="tag-item">Architecture</span>
+          </div>
+        </div>
+
+        <!-- Practical Info -->
+        <div class="info-section">
+          <h2>Practical Information</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="ii-label">OPENING HOURS</div>
+              <div class="ii-val">9AM – 10PM</div>
+            </div>
+            <div class="info-item">
+              <div class="ii-label">ENTRY FEE</div>
+              <div class="ii-val">Free</div>
+            </div>
+            <div class="info-item">
+              <div class="ii-label">BEST TIME</div>
+              <div class="ii-val">Sunset</div>
+            </div>
+            <div class="info-item">
+              <div class="ii-label">DURATION</div>
+              <div class="ii-val">2–3 hours</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="info-section">
+          <h2>Ratings & Reviews</h2>
+          <div class="rating-row">
+            <div class="big-rating">4.9</div>
+            <div class="stars-col">
+              <div class="stars">★★★★★</div>
+              <div class="rev">1,204 reviews</div>
+            </div>
+          </div>
+          <div class="rating-bars">
+            <div class="rbar-row"><span>5</span><div class="rbar"><div class="rbar-fill" style="width:85%"></div></div></div>
+            <div class="rbar-row"><span>4</span><div class="rbar"><div class="rbar-fill" style="width:10%"></div></div></div>
+            <div class="rbar-row"><span>3</span><div class="rbar"><div class="rbar-fill" style="width:3%"></div></div></div>
+            <div class="rbar-row"><span>2</span><div class="rbar"><div class="rbar-fill" style="width:1%"></div></div></div>
+            <div class="rbar-row"><span>1</span><div class="rbar"><div class="rbar-fill" style="width:1%"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="info-section">
+          <h2>Photos</h2>
+          <div class="gallery">
+            <div class="gallery-img"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Al-Diriyah.jpg/640px-Al-Diriyah.jpg" alt="" onerror="this.style.display='none'"/></div>
+            <div class="gallery-img"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/At-Turaif_district_in_Ad-Dir%27iyah_2.jpg/640px-At-Turaif_district_in_Ad-Dir%27iyah_2.jpg" alt="" onerror="this.style.display='none'"/></div>
+            <div class="gallery-img"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Al_Diriyah_2017.jpg/640px-Al_Diriyah_2017.jpg" alt="" onerror="this.style.display='none'"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right sidebar -->
+      <div>
+        <div class="action-card">
+          <h3>Plan Your Visit</h3>
+          <div class="price-display">Free <span>entry</span></div>
+          <div class="price-note">Paid experiences available inside</div>
+          <button class="btn-primary-full" onclick="window.location.href='planner.html'">Add to Trip Plan</button>
+          <button class="btn-outline-full" onclick="toggleFav()">Save to Favorites</button>
+          <div class="map-placeholder">
+            <span>📍 Al-Diriyah, Riyadh</span>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <h3>Nearby Places</h3>
+          <div class="nearby-list">
+            <a href="place.html?id=2" class="nearby-item">
+              <div class="nearby-img"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/National_Museum_of_Saudi_Arabia_Riyadh.jpg/320px-National_Museum_of_Saudi_Arabia_Riyadh.jpg" alt="" onerror="this.parentElement.style.background='#c5d9c9'"/></div>
+              <div class="nearby-info"><strong>National Museum</strong><span>★ 4.8 · 12 km away</span></div>
+            </a>
+            <a href="place.html?id=7" class="nearby-item">
+              <div class="nearby-img"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Al_Murabba_Palace.jpg/320px-Al_Murabba_Palace.jpg" alt="" onerror="this.parentElement.style.background='#c5d9c9'"/></div>
+              <div class="nearby-info"><strong>Al Murabba Palace</strong><span>★ 4.5 · 10 km away</span></div>
+            </a>
+            <a href="place.html?id=3" class="nearby-item">
+              <div class="nearby-img"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Kingdom_Centre_Tower%2C_Riyadh.jpg/320px-Kingdom_Centre_Tower%2C_Riyadh.jpg" alt="" onerror="this.parentElement.style.background='#c5d9c9'"/></div>
+              <div class="nearby-info"><strong>Kingdom Centre</strong><span>★ 4.7 · 18 km away</span></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Load data from URL params (id-based)
+const places = {
+  1: { name:'Al-Diriyah', cat:'HERITAGE', loc:'Northwest Riyadh', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Al-Diriyah.jpg/1280px-Al-Diriyah.jpg', desc:'Al-Diriyah is a town on the northwestern outskirts of Riyadh, Saudi Arabia, the original home of the Saudi royal family and a UNESCO World Heritage Site since 2010. The At-Turaif district features remarkable Najdi architectural style buildings dating back to the 18th century.', price:'Free', hours:'9AM – 10PM', fee:'Free', time:'2–3 hours' },
+  2: { name:'National Museum', cat:'CULTURE', loc:'Al Murabba, Riyadh', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/National_Museum_of_Saudi_Arabia_Riyadh.jpg/1280px-National_Museum_of_Saudi_Arabia_Riyadh.jpg', desc:'The National Museum of Saudi Arabia is located in Riyadh and is one of the most important cultural institutions in the country. It contains artifacts and exhibits on the history and culture of Saudi Arabia from pre-Islamic times to the present.', price:'25 SAR', hours:'9AM – 9PM', fee:'25 SAR', time:'1–2 hours' },
+  3: { name:'Kingdom Centre Tower', cat:'LANDMARK', loc:'Al Olaya, Riyadh', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Kingdom_Centre_Tower%2C_Riyadh.jpg/800px-Kingdom_Centre_Tower%2C_Riyadh.jpg', desc:'The Kingdom Centre is a skyscraper in Riyadh, Saudi Arabia. It is one of the tallest skyscrapers in Saudi Arabia and the most recognizable landmark in Riyadh, featuring a sky bridge and observation deck at the top with panoramic city views.', price:'Free', hours:'10AM – 12AM', fee:'Free', time:'1–2 hours' },
+  4: { name:'Boulevard World', cat:'ENTERTAINMENT', loc:'King Salman Rd, Riyadh', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Boulevard_Riyadh_City.jpg/1280px-Boulevard_Riyadh_City.jpg', desc:'Boulevard World is one of the most popular entertainment destinations in Riyadh, offering zones themed around different countries and cultures. It features international cuisine, live entertainment, shopping, and attractions for the whole family.', price:'75 SAR', hours:'4PM – 2AM', fee:'75 SAR', time:'3–5 hours' },
+  5: { name:'Wadi Namar Park', cat:'OUTDOOR', loc:'South Riyadh', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Wadi_Namar_Waterfall%2C_Riyadh.jpg/1280px-Wadi_Namar_Waterfall%2C_Riyadh.jpg', desc:'Wadi Namar Park is a natural park in southern Riyadh featuring a picturesque lake, walking trails, and lush greenery. It is a popular spot for families and nature lovers looking for an escape within the city, with a beautiful waterfall during rainy season.', price:'Free', hours:'7AM – 11PM', fee:'Free', time:'1–3 hours' },
+  6: { name:'Najd Village Restaurant', cat:'DINING', loc:'Al Malaz, Riyadh', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Saudi_food.jpg/1280px-Saudi_food.jpg', desc:'Najd Village is a traditional Saudi restaurant known for its authentic Najdi cuisine and traditional decor. Set in a traditional mud-brick village style architecture, it offers an immersive dining experience with classic Saudi dishes like jareesh, saleeg, and kabsa.', price:'120–200 SAR', hours:'12PM – 12AM', fee:'120–200 SAR', time:'1–2 hours' },
+  7: { name:'Al Murabba Palace', cat:'HERITAGE', loc:'Al Murabba, Riyadh', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Al_Murabba_Palace.jpg/1280px-Al_Murabba_Palace.jpg', desc:'Al Murabba Palace is a historic royal palace built by King Abdulaziz in the 1930s. It served as the main royal residence and is one of the most important historical buildings in Riyadh, offering a window into the early history of the Saudi state.', price:'Free', hours:'9AM – 8PM', fee:'Free', time:'1 hour' },
+};
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id') || 1;
+const p = places[id] || places[1];
+
+document.getElementById('heroImg').src = p.img;
+document.getElementById('heroImg').alt = p.name;
+document.getElementById('catPill').textContent = p.cat;
+document.getElementById('placeName').textContent = p.name;
+document.getElementById('placeLoc').textContent = p.loc;
+document.getElementById('placeDesc').textContent = p.desc;
+document.title = 'SaudiWay - ' + p.name;
+
+let faved = false;
+function toggleFav(){
+  faved = !faved;
+  const svg = document.querySelector('#favBtn svg');
+  svg.style.fill = faved ? '#e53e3e' : 'none';
+  svg.style.stroke = faved ? '#e53e3e' : '#1c1c1c';
+}
+</script>
+</body>
+</html>

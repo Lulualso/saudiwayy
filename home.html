@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SaudiWay - Home</title>
+  <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap)" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    /* â”€â”€ Fixed Search Bar (global) â”€â”€ */
+    .topbar{
+      position:fixed;
+      top:0;
+      left:260px;
+      right:0;
+      height:68px;
+      background:#f6f2e9;
+      border-bottom:1px solid #eee8db;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 32px;
+      z-index:999;
+    }
+    .search-wrap{
+      display:flex;
+      align-items:center;
+      background:#fff;
+      border:1px solid #eee8db;
+      border-radius:14px;
+      padding:0 16px;
+      height:42px;
+      gap:10px;
+      width:340px;
+    }
+    .search-wrap input{
+      border:none;
+      outline:none;
+      background:transparent;
+      font-size:14px;
+      color:#1c1c1c;
+      width:100%;
+      font-family:'Inter',sans-serif;
+    }
+    .search-wrap input::placeholder{color:#aaa}
+    .search-wrap svg{width:16px;height:16px;opacity:.5;flex-shrink:0}
+    .topbar-right{display:flex;align-items:center;gap:16px}
+    .icon-btn{
+      width:38px;height:38px;border-radius:12px;
+      background:#fff;border:1px solid #eee8db;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+    }
+    .icon-btn svg{width:17px;height:17px;opacity:.7}
+    .avatar-chip{
+      width:36px;height:36px;border-radius:50%;
+      background:linear-gradient(135deg,#2a6a3f,#3a8f56);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-size:13px;font-weight:700;cursor:pointer;
+    }
+
+    .main{ margin-top:68px; }
+
+    /* â”€â”€ Hero â”€â”€ */
+    .hero{
+      background:linear-gradient(135deg,#1f4d2e 0%,#2a6a3f 100%);
+      border-radius:24px;
+      padding:36px 40px;
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:28px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';
+      position:absolute;
+      width:400px;height:400px;
+      background:rgba(255,255,255,0.04);
+      border-radius:50%;
+      right:-100px;top:-100px;
+    }
+    .hero-sub{font-size:11px;letter-spacing:2.5px;opacity:.7;margin-bottom:10px;text-transform:uppercase}
+    .hero h1{font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.15;margin-bottom:8px}
+    .hero h1 em{font-style:normal;color:#a8d8b4}
+    .hero p{font-size:14px;opacity:.7;max-width:340px;margin-bottom:24px}
+    .hero-btn{
+      background:#fff;color:#1f4d2e;border:none;
+      padding:12px 24px;border-radius:12px;
+      font-size:14px;font-weight:700;cursor:pointer;
+      text-decoration:none;display:inline-block;
+      transition:all 0.2s;
+    }
+    .hero-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.15)}
+
+    .sec{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .sec h2{font-size:17px;font-weight:700;margin:0}
+    .sec a{font-size:12px;color:#2a6a3f;text-decoration:none;font-weight:600;letter-spacing:.5px}
+
+    /* â”€â”€ Categories â”€â”€ */
+    .cats{display:flex;gap:12px;margin-bottom:32px;overflow-x:auto;padding-bottom:4px}
+    .cats::-webkit-scrollbar{display:none}
+    .cat{
+      flex-shrink:0;
+      background:#fff;
+      border:1px solid #eee8db;
+      border-radius:14px;
+      padding:14px 20px;
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      cursor:pointer;transition:all 0.2s;min-width:90px;
+    }
+    .cat:hover{border-color:#2a6a3f;background:#f0f7f2}
+    .cat.active{background:#1f4d2e;border-color:#1f4d2e;color:#fff}
+    .cat svg{width:22px;height:22px}
+    .cat span{font-size:12px;font-weight:600}
+
+    /* â”€â”€ Place cards â”€â”€ */
+    .places-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px}
+    .place-card{
+      background:#fff;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 4px 16px rgba(0,0,0,0.05);
+      cursor:pointer;
+      transition:all 0.3s ease;
+      text-decoration:none;color:inherit;
+      position:relative;
+    }
+    .place-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
+    .place-card.hidden{
+      opacity:0;
+      transform:scale(0.95);
+      pointer-events:none;
+      position:absolute;
+      visibility:hidden;
+    }
+    .place-img{
+      height:180px;
+      position:relative;
+      overflow:hidden;
+      background:#e8e2d8;
+    }
+    .place-img img{
+      width:100%;height:100%;object-fit:cover;
+      display:block;
+      transition:transform 0.3s;
+    }
+    .place-card:hover .place-img img{transform:scale(1.05)}
+    .place-img .fav-btn{
+      position:absolute;top:12px;right:12px;
+      width:32px;height:32px;background:rgba(255,255,255,0.9);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      border:none;cursor:pointer;
+    }
+    .place-img .fav-btn svg{width:15px;height:15px}
+    .place-img .cat-tag{
+      position:absolute;top:12px;left:12px;
+      background:rgba(31,77,46,0.85);color:#fff;
+      font-size:10px;letter-spacing:1px;padding:4px 10px;border-radius:999px;
+    }
+    .place-body{padding:14px}
+    .place-body h3{font-size:15px;font-weight:700;margin:0 0 4px}
+    .place-body .loc{font-size:12px;color:#888;display:flex;align-items:center;gap:4px;margin-bottom:8px}
+    .place-body .loc svg{width:12px;height:12px}
+    .place-meta{display:flex;align-items:center;justify-content:space-between}
+    .stars{font-size:12px;color:#e8a020;font-weight:600}
+    .price-tag{font-size:12px;color:#2a6a3f;font-weight:700;background:#edf6ee;padding:3px 10px;border-radius:999px}
+
+    .no-results{
+      display:none;
+      text-align:center;
+      padding:40px;
+      color:#888;
+      font-size:14px;
+      grid-column:1/-1;
+    }
+    .no-results.show{display:block}
+
+    /* â”€â”€ Description Modal â”€â”€ */
+    .desc-modal{
+      position:fixed;
+      top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.4);
+      display:none;
+      align-items:center;justify-content:center;
+      z-index:1000;
+    }
+    .desc-box{
+      background:#fff;
+      border-radius:16px;
+      padding:24px;
+      max-width:400px;
+      text-align:center;
+    }
+    .desc-box h3{margin:0 0 8px;font-size:18px}
+    .desc-box p{color:#555;font-size:14px;margin-bottom:16px}
+    .close-btn{
+      background:#1f4d2e;color:#fff;border:none;
+      border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;
+    }
+
+    /* â”€â”€ Bottom row â”€â”€ */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .promo-card{
+      background:linear-gradient(135deg,#1f4d2e,#2a6a3f);
+      border-radius:20px;padding:24px;color:#fff;
+    }
+    .promo-card .p-tag{font-size:10px;letter-spacing:2px;opacity:.65;margin-bottom:8px}
+    .promo-card h3{font-size:18px;font-weight:700;margin-bottom:6px}
+    .promo-card p{font-size:13px;opacity:.7;margin-bottom:20px}
+    .promo-card a{
+      background:#fff;color:#1f4d2e;
+      padding:10px 20px;border-radius:10px;
+      font-size:13px;font-weight:700;text-decoration:none;display:inline-block;
+    }
+
+    .quick-links{background:#fff;border-radius:20px;padding:20px;border:1px solid #eee8db}
+    .quick-links h3{font-size:15px;font-weight:700;margin:0 0 14px}
+    .ql-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f4efe4;text-decoration:none;color:inherit;cursor:pointer;}
+    .ql-item:last-child{border-bottom:none}
+    .ql-ico{width:36px;height:36px;border-radius:10px;background:#f0f7f2;display:flex;align-items:center;justify-content:center;}
+    .ql-ico svg{width:17px;height:17px;color:#2a6a3f}
+    .ql-text{flex:1}
+    .ql-text strong{display:block;font-size:13px;font-weight:600}
+    .ql-text span{font-size:11px;color:#888}
+    .ql-chev{opacity:.4;font-size:18px}
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+       <div class="brand">
+  <img src="SaudiWay logo.png" class="brand-logo" alt="SaudiWay Logo"/>
+  
+  <div class="tag">Discover the Heart of Riyadh</div>
+</div>
+      <nav class="nav">
+        <a href="home.html" class="menu-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </a>
+        <a href="search.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
+        </a>
+        <a href="budget.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Budget Estimator
+        </a>
+        <a href="planner.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Plan My Trips
+        </a>
+        <a href="profile.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile
+        </a>
+        <a href="dashboard.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="setting.html" class="menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Fixed Top Search Bar -->
+  <div class="topbar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search places in Riyadh..."/>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+      <div class="avatar-chip">SK</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="main" style="padding:28px 32px">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div>
+        <p class="hero-sub">Welcome back, Sami</p>
+        <h1>Discover <em>Riyadh</em><br>Your Way</h1>
+        <p>Handpicked experiences from the heart of the capital, curated for explorers like you.</p>
+        <a href="search.html" class="hero-btn">Explore Now</a>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="sec"><h2>Browse by Category</h2></div>
+    <div class="cats">
+      <div class="cat active" data-category="all"><span>All</span></div>
+      <div class="cat" data-category="heritage"><span>Heritage</span></div>
+      <div class="cat" data-category="dining"><span>Dining</span></div>
+      <div class="cat" data-category="entertainment"><span>Entertainment</span></div>
+      <div class="cat" data-category="culture"><span>Art & Culture</span></div>
+      <div class="cat" data-category="outdoor"><span>Outdoor</span></div>
+      <div class="cat" data-category="landmark"><span>Landmarks</span></div>
+    </div>
+
+    <!-- Featured Places -->
+    <div class="sec"><h2>Featured in Riyadh</h2></div>
+    <div class="places-grid">
+      <div class="place-card" data-category="heritage" data-desc="Al-Diriyah is the birthplace of the Saudi state, offering a glimpse into the kingdomâ€™s rich heritage and stunning mud-brick architecture.">
+        <div class="place-img"><img src="Al Diriyah.png" alt="Al-Diriyah"/></div>
+        <div class="place-body">
+          <h3>Al-Diriyah</h3><div class="loc">Northwest Riyadh</div>
+          <div class="place-meta">
+  <span class="stars">★ 4.9</span>
+  <span class="price-tag">Free</span>
+</div>
+        </div>
+      </div>
+
+      <div class="place-card" data-category="culture" data-desc="The National Museum showcases Saudi Arabiaâ€™s history from prehistoric times to the modern era with immersive exhibits and artifacts.">
+        <div class="place-img"><img src="National Museum.png" alt="National Museum"/></div>
+        <div class="place-body">
+          <h3>National Museum</h3><div class="loc">Al Murabba, Riyadh</div>
+          <div class="place-meta">
+  <span class="stars">★ 4.8</span>
+  <span class="price-tag">25 SAR</span>
+</div>
+        </div>
+      </div>
+
+      <div class="place-card" data-category="landmark" data-desc="Kingdom Centre Tower is one of Riyadhâ€™s most iconic landmarks, offering panoramic city views from its Sky Bridge.">
+        <div class="place-img"><img src="Kingdom Tower.png" alt="Kingdom Tower"/></div>
+        <div class="place-body">
+          <h3>Kingdom Centre Tower</h3><div class="loc">Al Olaya, Riyadh</div>
+          <div class="place-meta">
+  <span class="stars">★ 4.7</span>
+  <span class="price-tag">Free</span>
+</div>
+        </div>
+      </div>
+
+      <div class="place-card" data-category="dining" data-desc="Najd Village serves traditional Saudi dishes in an authentic setting that reflects the countryâ€™s cultural legacy.">
+        <div class="place-img"><img src="Najd Village.png" alt="Najd Village"/></div>
+        <div class="place-body">
+          <h3>Najd Village</h3><div class="loc">Al Malaz, Riyadh</div>
+          <div class="place-meta">
+  <span class="stars">★ 4.6</span>
+  <span class="price-tag">150 SAR</span>
+</div>
+        </div>
+      </div>
+
+      <div class="place-card" data-category="entertainment" data-desc="Riyadh Boulevard offers world-class entertainment, restaurants, and events â€” a central hub of Riyadh Season activities.">
+        <div class="place-img"><img src="Boulevard World.png" alt="Riyadh Boulevard"/></div>
+        <div class="place-body">
+          <h3>Riyadh Boulevard</h3><div class="loc">Hittin, Riyadh</div>
+          <div class="place-meta">
+  <span class="stars">★ 4.8</span>
+  <span class="price-tag">75 SAR</span>
+</div>
+        </div>
+      </div>
+
+      <div class="place-card" data-category="outdoor" data-desc="Edge of the World is a breathtaking cliff formation offering desert views that stretch endlessly â€” perfect for adventure lovers.">
+        <div class="place-img"><img src="Edge of the World.png" alt="Edge of the World"/></div>
+        <div class="place-body">
+          <h3>Edge of the World</h3><div class="loc">90 km from Riyadh</div>
+          <div class="place-meta">
+  <span class="stars">★ 4.9</span>
+  <span class="price-tag">Free</span>
+</div>
+        </div>
+      </div>
+
+      <div class="no-results"><p>No places found in this category.</p></div>
+    </div>
+
+    <div class="two-col">
+      <div class="promo-card">
+        <p class="p-tag">LIMITED TIME</p>
+        <h3>Riyadh Season is Here</h3>
+        <p>Book experiences during the festival and save up to 20% on curated tours.</p>
+        <a href="budget.html">Estimate Budget</a>
+      </div>
+      <div class="quick-links">
+        <h3>Quick Access</h3>
+        <a href="planner.html" class="ql-item"><div class="ql-text"><strong>Plan a Trip</strong><span>Create a custom itinerary</span></div></a>
+        <a href="budget.html" class="ql-item"><div class="ql-text"><strong>Budget Estimator</strong><span>Calculate your trip cost</span></div></a>
+        <a href="setting.html" class="ql-item"><div class="ql-text"><strong>My Favorites</strong><span>Saved places & journeys</span></div></a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Description Modal -->
+<div class="desc-modal" id="descModal">
+  <div class="desc-box">
+    <h3 id="descTitle"></h3>
+    <p id="descText"></p>
+    <button class="close-btn" onclick="closeDesc()">Close</button>
+  </div>
+</div>
+
+<script>
+function toggleFav(btn){
+  btn.classList.toggle('active');
+  const svg = btn.querySelector('svg');
+  if(btn.classList.contains('active')){
+    svg.style.fill='#e53e3e';
+    svg.style.stroke='#e53e3e';
+  } else {
+    svg.style.fill='none';
+    svg.style.stroke='currentColor';
+  }
+}
+
+// Category Filter
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryButtons = document.querySelectorAll('.cat');
+  const placeCards = document.querySelectorAll('.place-card');
+  const noResults = document.querySelector('.no-results');
+  const modal = document.getElementById('descModal');
+  const descTitle = document.getElementById('descTitle');
+  const descText = document.getElementById('descText');
+
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      categoryButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      const selectedCategory = this.dataset.category;
+      let visibleCount = 0;
+      placeCards.forEach(card => {
+        if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      if (visibleCount === 0) noResults.classList.add('show');
+      else noResults.classList.remove('show');
+    });
+  });
+
+  // Description display
+  placeCards.forEach(card => {
+    card.addEventListener('click', function(){
+      const title = this.querySelector('h3').innerText;
+      const desc = this.dataset.desc || "No description available.";
+      descTitle.innerText = title;
+      descText.innerText = desc;
+      modal.style.display = 'flex';
+    });
+  });
+});
+
+function closeDesc(){
+  document.getElementById('descModal').style.display='none';
+}
+
+</script>
+</body>
+</html>
