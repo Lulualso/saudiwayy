@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SaudiWay - Register</title>
+
+  <link rel="stylesheet" href="login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="bg"></div>
+
+  <div class="card fade-up">
+
+    <p class="tag">BEGIN YOUR JOURNEY</p>
+    <h1>Create Your Account</h1>
+
+    <form action="register.php" method="POST">
+
+      <label>First Name</label>
+      <div class="input">
+        <input type="text" name="first_name" placeholder="First Name" required>
+      </div>
+
+      <label>Last Name</label>
+      <div class="input">
+        <input type="text" name="last_name" placeholder="Last Name" required>
+      </div>
+
+      <label>Email Address</label>
+      <div class="input">
+        <input type="email" name="email" placeholder="name@example.com" required>
+      </div>
+
+      <label>Phone Number</label>
+      <div class="input">
+        <input type="tel" name="phone" placeholder="05xxxxxxxx" required>
+      </div>
+
+      <label>Password</label>
+      <div class="input">
+        <input type="password" name="password" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        Create Account
+      </button>
+
+    </form>
+
+    <p class="bottom">
+      Already have an account?
+      <a href="login.html">Login</a>
+    </p>
+
+  </div>
+
+</div>
+
+</body>
+</html>
